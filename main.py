@@ -50,6 +50,21 @@ def update_user(id):
 
     return "", 204
 
+@app.route('/users/<int:id>', methods=['PUT'])
+def replace_user(id):
+    user = next((user for user in users if user['id'] == id), None)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    data = request.get_json()
+    if not data or "name" not in data or "lastname" not in data:
+        return jsonify({'message': 'Invalid data'}), 400
+
+    user["name"] = data["name"]
+    user["lastname"] = data["lastname"]
+
+    return "", 204
+
 
 if __name__ == '__main__':
     app.run(debug=True)
