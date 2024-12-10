@@ -33,6 +33,23 @@ def create_user():
     users.append(new_user)
     return jsonify(new_user), 201
 
+@app.route('/users/<int:id>', methods=['PATCH'])
+def update_user(id):
+    user = next((user for user in users if user['id'] == id), None)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    data = request.get_json()
+    if not data or ("name" not in data and "lastname" not in data):
+        return jsonify({"error": "Invalid input"}), 400
+
+    if "name" in data:
+        user["name"] = data["name"]
+    if "lastname" in data:
+        user["lastname"] = data["lastname"]
+
+    return "", 204
+
 
 if __name__ == '__main__':
     app.run(debug=True)
