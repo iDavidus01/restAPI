@@ -65,6 +65,15 @@ def replace_user(id):
 
     return "", 204
 
+@app.route('/users/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    user = next((user for user in users if user['id'] == id), None)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    users.remove(user)
+    return "", 204
+
 
 if __name__ == '__main__':
     app.run(debug=True)
